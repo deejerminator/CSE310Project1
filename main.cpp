@@ -122,7 +122,6 @@ int main(int argc, char* argv[]) {
              */
         }
     }
-
     // if argument = quick
     else if(string(argv[1]) == "quick"){cout << "this area is under construction\n" << endl; return 0;}
     // all other arguments
@@ -130,3 +129,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+// this is a test to see if gitlab updates 
