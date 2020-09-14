@@ -3,7 +3,13 @@
 
 using namespace std;
 
-
+/*
+ * in this shift function. we store the element in [0] to temp.
+ * when we shift all chars the left once, the element originally
+ * in [0] falls off, and the last element becomes empty.
+ * once the shifting is complete, we add the element stored in temp
+ * back to the end element.
+ * */
 void shift(string &s, int n){
     char temp = s[0];
     for (int i = 0; i < s.size()-1; i++){
