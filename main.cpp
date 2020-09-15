@@ -19,8 +19,8 @@ void shift(string &s, int n){
 }
 
 
-
 int main(int argc, char* argv[]) {
+
     string textFileInput;
 
     if(argc == 1){cout << "please enter ./run argument\n" << "[argument: insertion, quick]\n"; return 0;}
@@ -70,9 +70,7 @@ int main(int argc, char* argv[]) {
              * I used sentence[i][sentenceSize - 1] because this is the end element of each i, from 0 to sentenceSize
              * */
             string lastString[sentenceSize];
-            for (int i = 0; i < sentenceSize; i++) {
-                lastString[i] = sentence[i][sentenceSize - 1];
-            }
+            for (int i = 0; i < sentenceSize; i++) { lastString[i] = sentence[i][sentenceSize - 1];}
 
             /*
              * This is my for loop that detects and outputs which element
