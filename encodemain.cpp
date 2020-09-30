@@ -18,10 +18,57 @@ void shift(string &s, int n){
     s[n-1] = temp;
 }
 
+/*
+* This is my insertion sort
+* each element is swapped everytime sentence[j] > sentence[i].
+* i saved the string stored in sentence[i] to populate the next element if swapping was needed.
+* temp is declared before while loop
+* */
+void insertionSort(string s[], int n) {
+    string *pointer = s;
+    string temp;
+    for (int i = 1; i < n; i++) {
+        temp = *(pointer + i);
+        int j = i - 1;
+        while (j >= 0 && s[j].compare(temp) > 0) {
+            *(pointer + j + 1) = *(pointer + j);
+            j = j - 1;
+        }
+        *(pointer + j + 1) = temp;
+    }
+}
+
+int partition (string array[], int left, int right){
+    string pivot = array[right];
+    string temp;
+    int i = left-1;
+    for (int j = left; j < right; j++){
+        if(array[j].compare(pivot) <= 0){
+            i++;
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+    temp = array[i+1];
+    array[i+1] = array[right];
+    array[right] = temp;
+
+    return i+1;
+}
+
+void quickSort(string s[], int left, int right){
+    if(left < right){
+        int partitionIndex = partition(s, left, right);
+        quickSort(s, left, partitionIndex-1);
+        quickSort(s, partitionIndex+1, right);
+    }
+}
 
 int main(int argc, char* argv[]) {
 
-    string textFileInput;
+    string textFileInputInsertion;
+    string textFileInputQuick;
 
     if(argc == 1){cout << "please enter ./run argument\n" << "[argument: insertion, quick]\n"; return 0;}
 
@@ -31,9 +78,9 @@ int main(int argc, char* argv[]) {
          * we use while loop for get line, so everytime there is a new line, it will loop through the program.
          * the loop will terminate when it reaches the last delimiter
         */
-        while(getline(cin, textFileInput)) {
+        while(getline(cin, textFileInputInsertion)) {
 
-            int sentenceSize = textFileInput.length();
+            int sentenceSize = textFileInputInsertion.length();
             string sentence[sentenceSize];
 
             /*
@@ -43,27 +90,12 @@ int main(int argc, char* argv[]) {
              * everytime we loop, the newly shifted string will be in sentence[i+1]
              * */
             for (int i = 0; i < sentenceSize; i++) {
-                sentence[i] = textFileInput;
-                shift(textFileInput, sentenceSize);
+                sentence[i] = textFileInputInsertion;
+                shift(textFileInputInsertion, sentenceSize);
             }
 
-            /*
-             * This is my insertion sort
-             * each element is swapped everytime sentence[j] > sentence[i].
-             * i saved the string stored in sentence[i] to populate the next element if swapping was needed.
-             * temp is declared before while loop, but i will eventually save this part as a function.
-             * insertionsort(Arg A, Arg B)
-             * */
-            string temp;
-            for (int i = 1; i < sentenceSize; i++) {
-                temp = sentence[i];
-                int j = i - 1;
-                while (j >= 0 && sentence[j].compare(temp) > 0) {
-                    sentence[j + 1] = sentence[j];
-                    j = j - 1;
-                }
-                sentence[j + 1] = temp;
-            }
+            // calls insertionSort
+            insertionSort(sentence, sentenceSize);
 
             /*
              * This is to create last string of all chars at the end of the array list sentence[i]
@@ -82,7 +114,7 @@ int main(int argc, char* argv[]) {
              * added the break function so when the index is found, we exit the for loop
              * */
             for (int i = 0; i < sentenceSize; i++) {
-                if (sentence[i] == textFileInput) {
+                if (sentence[i] == textFileInputInsertion) {
                     cout << i << endl;
                     break;
                 }
@@ -118,15 +150,43 @@ int main(int argc, char* argv[]) {
                     count++;
                     i++;
                 }
-                cout << count << lastString[i] << " ";
+                cout << count << " " << lastString[i] << " ";
             }
             cout << endl;
         }
     }
-    // if argument = quick
-    else if(string(argv[1]) == "quick"){cout << "this area is under construction\n" << endl; return 0;}
-    // all other arguments
-    else {cout << "PLEASE USE ./run argument\n" << "[arguments: insertion, quick]\n"; return 0;}
+        // if argument = quick
+    else if(string(argv[1]) == "quick"){
+        while(getline(cin, textFileInputQuick)){
+            int sentenceSize = textFileInputQuick.length();
+            string sentence[sentenceSize];
+
+            for (int i = 0; i < sentenceSize; i++) {
+                sentence[i] = textFileInputQuick;
+                shift(textFileInputQuick, sentenceSize);
+            }
+
+            // call quickSort
+            quickSort(sentence, 0, sentenceSize-1);
+
+            // copy and paste from insertion
+            string lastString[sentenceSize];
+            for (int i = 0; i < sentenceSize; i++) { lastString[i] = sentence[i][sentenceSize - 1];}
+
+            for (int i = 0; i < sentenceSize; i++) {
+                if (sentence[i] == textFileInputQuick) { cout << i << endl; break;}
+            }
+
+            for (int i = 0; i < sentenceSize; i++) {
+                int count = 1;
+                while (lastString[i + 1] == lastString[i]) {count++; i++; }
+                cout << count << " " << lastString[i] << " ";
+            }
+            cout << endl;
+        }
+    }
+        // all other arguments
+    else {cout << "PLEASE USE ./run argument < input.txt > output.txt \n" << "[arguments: insertion, quick]\n"; return 0;}
 
     return 0;
 }
